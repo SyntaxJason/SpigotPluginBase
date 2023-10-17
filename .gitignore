@@ -1,0 +1,6 @@
+.settings/
+.vscode/
+.classpath
+.project
+dependency-reducded-pom.xml
+target/
