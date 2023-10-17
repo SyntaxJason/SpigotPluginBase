@@ -100,6 +100,7 @@
                             <shadedPattern>me.lauriichan.minecraft.pluginbase.shaded.gson</shadedPattern>
                         </relocation>
                     </relocations>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
             </plugin>-->
             <plugin>
