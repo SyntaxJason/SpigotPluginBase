@@ -24,10 +24,10 @@ import me.lauriichan.laylib.localization.MessageManager;
 import me.lauriichan.minecraft.pluginbase.command.BukkitActor;
 import me.lauriichan.minecraft.pluginbase.command.processor.IBukkitCommandProcessor;
 
-public final class BukkitCommandRedirectBridgeInjector implements ICommandInjector {
+public final class BukkitCommandRedirectBridgeInjector<A extends BukkitActor<?>> implements ICommandInjector {
 
     private final Plugin plugin;
-    private final BukkitCommandRedirectBridge bridge;
+    private final BukkitCommandRedirectBridge<A> bridge;
 
     private final MessageManager messageManager;
 
@@ -40,17 +40,17 @@ public final class BukkitCommandRedirectBridgeInjector implements ICommandInject
 
     public BukkitCommandRedirectBridgeInjector(final IBukkitCommandProcessor processor, final CommandManager commandManager,
         final MessageManager messageManager, final Plugin plugin,
-        final BiFunction<CommandSender, MessageManager, BukkitActor<?>> actorBuilder) {
+        final BiFunction<CommandSender, MessageManager, A> actorBuilder) {
         this.plugin = Objects.requireNonNull(plugin);
         this.prefix = plugin.getName().toLowerCase(Locale.ROOT);
-        this.bridge = new BukkitCommandRedirectBridge(processor, commandManager, messageManager, prefix, actorBuilder);
+        this.bridge = new BukkitCommandRedirectBridge<>(processor, commandManager, messageManager, prefix, actorBuilder);
         if (processor.requiresListener()) {
             plugin.getServer().getPluginManager().registerEvents(new BukkitCommandBridgeListener(commandManager, messageManager), plugin);
         }
         this.messageManager = messageManager;
     }
 
-    public BukkitCommandBridge getBridge() {
+    public BukkitCommandBridge<A> getBridge() {
         return bridge;
     }
 
