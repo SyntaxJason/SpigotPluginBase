@@ -14,21 +14,21 @@ import me.lauriichan.laylib.localization.MessageManager;
 import me.lauriichan.minecraft.pluginbase.command.BukkitActor;
 import me.lauriichan.minecraft.pluginbase.command.processor.IBukkitCommandProcessor;
 
-public abstract class BukkitCommandBridge implements CommandExecutor, TabCompleter {
+public abstract class BukkitCommandBridge<A extends BukkitActor<?>> implements CommandExecutor, TabCompleter {
 
     protected final IBukkitCommandProcessor processor;
 
     protected final CommandManager commandManager;
     protected final MessageManager messageManager;
 
-    private final BiFunction<CommandSender, MessageManager, BukkitActor<?>> actorBuilder;
+    private final BiFunction<CommandSender, MessageManager, A> actorBuilder;
 
     public BukkitCommandBridge(final IBukkitCommandProcessor processor, final CommandManager commandManager,
-        final MessageManager messageManager, final BiFunction<CommandSender, MessageManager, BukkitActor<?>> actorBuilder) {
+        final MessageManager messageManager, final BiFunction<CommandSender, MessageManager, A> actorBuilder) {
         this.processor = Objects.requireNonNull(processor);
         this.commandManager = Objects.requireNonNull(commandManager);
         this.messageManager = Objects.requireNonNull(messageManager);
-        this.actorBuilder = actorBuilder == null ? BukkitActor::new : actorBuilder;
+        this.actorBuilder = Objects.requireNonNull(actorBuilder, "Need Actor builder!");
     }
 
     public final IBukkitCommandProcessor getProcessor() {
@@ -43,7 +43,7 @@ public abstract class BukkitCommandBridge implements CommandExecutor, TabComplet
         return messageManager;
     }
 
-    public final BiFunction<CommandSender, MessageManager, BukkitActor<?>> getActorBuilder() {
+    public final BiFunction<CommandSender, MessageManager, A> getActorBuilder() {
         return actorBuilder;
     }
 

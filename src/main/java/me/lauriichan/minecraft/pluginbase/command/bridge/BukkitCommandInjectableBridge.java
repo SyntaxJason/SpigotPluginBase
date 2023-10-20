@@ -25,7 +25,7 @@ import me.lauriichan.laylib.localization.MessageManager;
 import me.lauriichan.minecraft.pluginbase.command.BukkitActor;
 import me.lauriichan.minecraft.pluginbase.command.processor.IBukkitCommandProcessor;
 
-public class BukkitCommandInjectableBridge extends BukkitCommandBridge {
+public class BukkitCommandInjectableBridge<A extends BukkitActor<?>> extends BukkitCommandBridge<A> {
 
     public static record CommandDefinition(String prefix, String name, List<String> aliases, String description) {
 
@@ -99,7 +99,7 @@ public class BukkitCommandInjectableBridge extends BukkitCommandBridge {
 
     public BukkitCommandInjectableBridge(final IBukkitCommandProcessor processor, final CommandManager commandManager,
         final MessageManager messageManager, final Plugin plugin, final CommandDefinition definition,
-        final BiFunction<CommandSender, MessageManager, BukkitActor<?>> actorBuilder) {
+        final BiFunction<CommandSender, MessageManager, A> actorBuilder) {
         super(processor, commandManager, messageManager, actorBuilder);
         this.plugin = plugin;
         this.definition = definition;
@@ -140,7 +140,7 @@ public class BukkitCommandInjectableBridge extends BukkitCommandBridge {
      * Management
      */
 
-    public BukkitCommandInjectableBridge fallbackCommand(final String fallbackCommand) {
+    public BukkitCommandInjectableBridge<A> fallbackCommand(final String fallbackCommand) {
         this.fallbackCommand = fallbackCommand;
         return this;
     }
@@ -157,7 +157,7 @@ public class BukkitCommandInjectableBridge extends BukkitCommandBridge {
         return injected;
     }
 
-    public BukkitCommandInjectableBridge inject() {
+    public BukkitCommandInjectableBridge<A> inject() {
         if (injected) {
             return this;
         }
@@ -174,7 +174,7 @@ public class BukkitCommandInjectableBridge extends BukkitCommandBridge {
         return this;
     }
 
-    public BukkitCommandInjectableBridge uninject() {
+    public BukkitCommandInjectableBridge<A> uninject() {
         if (!injected) {
             return this;
         }

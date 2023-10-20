@@ -9,13 +9,13 @@ import me.lauriichan.laylib.localization.MessageManager;
 import me.lauriichan.minecraft.pluginbase.command.BukkitActor;
 import me.lauriichan.minecraft.pluginbase.command.processor.IBukkitCommandProcessor;
 
-final class BukkitCommandRedirectBridge extends BukkitCommandBridge {
+final class BukkitCommandRedirectBridge<A extends BukkitActor<?>> extends BukkitCommandBridge<A> {
 
     private final String prefix;
 
     public BukkitCommandRedirectBridge(final IBukkitCommandProcessor processor, final CommandManager commandManager,
         final MessageManager messageManager, final String prefix,
-        final BiFunction<CommandSender, MessageManager, BukkitActor<?>> actorBuilder) {
+        final BiFunction<CommandSender, MessageManager, A> actorBuilder) {
         super(processor, commandManager, messageManager, actorBuilder);
         this.prefix = prefix + ':';
     }
