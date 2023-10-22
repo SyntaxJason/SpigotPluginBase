@@ -52,8 +52,9 @@ final class BukkitCommandLineProcessor implements IBukkitCommandProcessor {
             return;
         }
         final Node node = triple.getB();
+        final String commandPath = triple.getC().substring(1);
         if (node.getAction() == null) {
-            actor.sendTranslatedMessage("command.process.create.no-action", Key.of("command", triple.getC()));
+            actor.sendTranslatedMessage("command.process.create.no-action", Key.of("command", commandPath));
             return;
         }
         final NodeAction action = node.getAction();
@@ -67,8 +68,7 @@ final class BukkitCommandLineProcessor implements IBukkitCommandProcessor {
             commandManager.executeProcess(actor, process);
             return;
         }
-        final int space = countSpace(triple.getC());
-        System.out.println("'" + triple.getC() + "': " + space);
+        final int space = countSpace(commandPath);
         int argIdx = 0;
         for (int index = 0; index < space; index++) {
             while (args[argIdx++].isEmpty()) {
@@ -150,7 +150,8 @@ final class BukkitCommandLineProcessor implements IBukkitCommandProcessor {
             return Collections.emptyList();
         }
         int argIdx = 0;
-        for (int index = 0; index <= path.length; index++) {
+        int maxLength = Math.min(path.length, args.length);
+        for (int index = 0; index <= maxLength; index++) {
             while (args[argIdx++].isEmpty()) {
             }
         }
